@@ -36,22 +36,16 @@ const findDigit = (line, sortFunction) => {
   }
 };
 
-const sortByLowestIndexToHighest = (a, z) => {
+const sortByIndexAscending = (a, z) => {
   if (a.index < z.index) return -1;
   if (a.index > z.index) return 1;
   return 0;
 };
 
-const sortByHighestIndexToLowest = (a, z) => {
-  if (a.index < z.index) return 1;
-  if (a.index > z.index) return -1;
-  return 0;
-};
-
 const main = (input) => {
   const numbers = input.map(line => {
-    const firstDigit = findDigit(line, sortByLowestIndexToHighest);
-    const lastDigit = findDigit(line, sortByHighestIndexToLowest);
+    const firstDigit = findDigit(line, sortByIndexAscending);
+    const lastDigit = findDigit(line, (a, z) => sortByIndexAscending(z, a));
     return (10 * firstDigit) + lastDigit;
   });
   return numbers.reduce((sum, num) => sum + num, 0);
