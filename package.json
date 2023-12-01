@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "day01": "node day01/solution.js day01/input"
+  },
   "author": "",
   "license": "ISC",
   "type": "module"
