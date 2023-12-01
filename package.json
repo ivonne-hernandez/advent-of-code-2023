@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "NODE_ENV=test node --test",
     "day01": "node day01/solution.js day01/input"
   },
   "author": "",

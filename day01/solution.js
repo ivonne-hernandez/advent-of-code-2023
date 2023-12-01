@@ -57,5 +57,9 @@ const main = (input) => {
   return numbers.reduce((sum, num) => sum + num, 0);
 };
 
-const result = main(readInput());
-console.log(result);
+if (process.env.NODE_ENV !== 'test') {
+  const result = main(readInput());
+  console.log(result);
+}
+
+export default main;
