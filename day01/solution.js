@@ -32,7 +32,7 @@ const findDigit = (line, sortFunction) => {
   if (Number(number)) {
     return Number(number);
   } else {
-    return Number(numberWordToNumber[number]);
+    return numberWordToNumber[number];
   }
 };
 
