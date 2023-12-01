@@ -52,7 +52,7 @@ const main = (input) => {
   const numbers = input.map(line => {
     const firstDigit = findDigit(line, sortByLowestIndexToHighest);
     const lastDigit = findDigit(line, sortByHighestIndexToLowest);
-    return (Number(firstDigit) * 10) + Number(lastDigit)
+    return (10 * firstDigit) + lastDigit;
   });
   return numbers.reduce((sum, num) => sum + num, 0);
 };
