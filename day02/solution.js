@@ -23,7 +23,7 @@ const determineIfGameIsPossible = (gameRecord) => {
   return true;
 };
 
-const main = (input) => {
+const part1 = (input) => {
   return input.reduce((possibleGameIdSums, gameRecord) => {
     if (determineIfGameIsPossible(gameRecord)) {
       possibleGameIdSums += getGameId(gameRecord);
@@ -33,7 +33,7 @@ const main = (input) => {
 };
 
 if (process.env.NODE_ENV !== 'test') {
-  console.log(main(readInput()));
+  console.log('Part 1 solution:', part1(readInput()));
 }
 
-export default main;
+export { part1 };
