@@ -10,7 +10,7 @@ import { fileURLToPath } from 'url';
 const readInput = (fileName = process.argv[2]) => {
   const directory = dirname(fileURLToPath(import.meta.url));
   const filePath = join(directory, fileName);
-  const rawInput = readFileSync(filePath, {encoding:'utf8', flag:'r'});
+  const rawInput = readFileSync(filePath, { encoding:'utf8', flag:'r' });
   return rawInput.replaceAll(/\r\n|\r/g, '\n').split(/\n/);
 };
 
