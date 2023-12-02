@@ -35,8 +35,29 @@ const part1 = (input) => {
   }, 0);
 };
 
+const findMax = (numbers) => {
+  return numbers.reduce((max, num) => {
+    if (num > max) {
+      return num;
+    }
+    return max;
+  }, numbers[0]);
+};
+
+const calculatePower = (gameRecord) => {
+  const { red, green, blue } = getColorCounts(gameRecord);
+  return findMax(red) * findMax(green) * findMax(blue);
+};
+
+const part2 = (input) => {
+  return input.reduce((sumOfPowers, gameRecord) => {
+    return sumOfPowers + calculatePower(gameRecord);
+  }, 0);
+};
+
 if (process.env.NODE_ENV !== 'test') {
   console.log('Part 1 solution:', part1(readInput()));
+  console.log('Part 2 solution:', part2(readInput()));
 }
 
-export { part1 };
+export { part1, part2 };
