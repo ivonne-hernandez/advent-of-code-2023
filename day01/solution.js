@@ -1,6 +1,8 @@
 import readInput from "../read-input.js";
 
-const regexes = [
+const part1Regexes = [/\d/g];
+
+const part2Regexes = [
   /\d/g,
   /one/g,
   /two/g,
@@ -25,7 +27,7 @@ const numberWordToNumber = {
   'nine': 9,
 };
 
-const findDigit = (line, sortFunction) => {
+const findDigit = (line, regexes, sortFunction) => {
   const matches = regexes.flatMap(regex => [...line.matchAll(regex)]);
   const sortedMatches = matches.sort(sortFunction);
   const number = sortedMatches[0][0];
@@ -42,18 +44,21 @@ const sortByIndexAscending = (a, z) => {
   return 0;
 };
 
-const main = (input) => {
+const sumCalibrationValues = (input, regexes) => {
   const numbers = input.map(line => {
-    const firstDigit = findDigit(line, sortByIndexAscending);
-    const lastDigit = findDigit(line, (a, z) => sortByIndexAscending(z, a));
+    const firstDigit = findDigit(line, regexes, sortByIndexAscending);
+    const lastDigit = findDigit(line, regexes, (a, z) => sortByIndexAscending(z, a));
     return (10 * firstDigit) + lastDigit;
   });
   return numbers.reduce((sum, num) => sum + num, 0);
 };
 
+const part1 = (input) => sumCalibrationValues(input, part1Regexes);
+const part2 = (input) => sumCalibrationValues(input, part2Regexes);
+
 if (process.env.NODE_ENV !== 'test') {
-  const result = main(readInput());
-  console.log(result);
+  console.log('Part 1 solution:', part1(readInput()));
+  console.log('Part 2 solution:', part2(readInput()));
 }
 
-export default main;
+export { part1, part2 };
