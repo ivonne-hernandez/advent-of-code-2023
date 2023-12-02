@@ -10,17 +10,20 @@ const getGameId = (gameRecord) => {
   return Number(gameRecord.match(/^Game (\d+):/)[1]);
 };
 
+const getColorCounts = (gameRecord) => {
+  const red = [...gameRecord.matchAll(/(\d+) red/g)].map(match => match[1]);
+  const green = [...gameRecord.matchAll(/(\d+) green/g)].map(match => match[1]);
+  const blue = [...gameRecord.matchAll(/(\d+) blue/g)].map(match => match[1]);
+  return { red, green, blue };
+};
+
 const determineIfGameIsPossible = (gameRecord) => {
-  const redCounts = [...gameRecord.matchAll(/(\d+) red/g)].map(match => match[1]);
-  if (redCounts.some(count => count > possibleCubeCounts.red)) return false;
-
-  const greenCounts = [...gameRecord.matchAll(/(\d+) green/g)].map(match => match[1]);
-  if (greenCounts.some(count => count > possibleCubeCounts.green)) return false;
-
-  const blueCounts = [...gameRecord.matchAll(/(\d+) blue/g)].map(match => match[1]);
-  if (blueCounts.some(count => count > possibleCubeCounts.blue)) return false;
-
-  return true;
+  const colorCounts = getColorCounts(gameRecord);
+  return (
+    colorCounts.red.every(count => count <= possibleCubeCounts.red) &&
+    colorCounts.green.every(count => count <= possibleCubeCounts.green) &&
+    colorCounts.blue.every(count => count <= possibleCubeCounts.blue)
+  );
 };
 
 const part1 = (input) => {

@@ -4,9 +4,17 @@ import readInput from "../read-input.js";
 import { part1 } from "./solution.js";
 
 describe('day02 solution', () => {
-  it('should return the correct value using the part 1 example input', () => {
-    const input = readInput('day02/example-input-1');
-    const result = part1(input);
-    assert.strictEqual(result, 8);
+  describe('part 1', () => {
+    it('should return the correct value using the example input', () => {
+      const input = readInput('day02/example-input-1');
+      const result = part1(input);
+      assert.strictEqual(result, 8);
+    });
+
+    it('should return the correct value using the puzzle input', () => {
+      const input = readInput('day02/input');
+      const result = part1(input);
+      assert.strictEqual(result, 2685);
+    });
   });
 });
