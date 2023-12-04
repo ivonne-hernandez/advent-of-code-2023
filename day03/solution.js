@@ -45,8 +45,38 @@ const part1 = (input) => {
     .reduce((sum, num) => sum + num, 0);
 };
 
-const part2 = (input) => {
+const getAdjacentEngineParts = (allLines, { left, right, top, bottom }) => {
+  const adjacentEngineParts = [];
+  for (let row = top; row <= bottom; row++) {
+    const possibleAdjacentNumbersInRow = Array.from(allLines[row].matchAll(/\d+/g));
+    const adjacentNumbersInRow = possibleAdjacentNumbersInRow.filter(match => {
+      const startingColumn = match.index;
+      const endingColumn = match.index + match[0].length - 1;
+      return endingColumn >= left && startingColumn <= right;
+    })
+      .map(match => Number(match[0]));
+    adjacentEngineParts.push(...adjacentNumbersInRow);
+  }
+  return adjacentEngineParts;
+}
 
+const findGearRatios = (line, rowNumber, allLines) => {
+  const possibleGears = Array.from(line.matchAll(/\*/g));
+  if (possibleGears.length === 0) return 0;
+  return possibleGears.map(match => {
+    const { left, right, top, bottom } = getBoundariesOfAdjacentBox(match, rowNumber, allLines);
+    const adjacentEngineParts = getAdjacentEngineParts(allLines, { left, right, top, bottom });
+    if (adjacentEngineParts.length === 2) {
+      return adjacentEngineParts[0] * adjacentEngineParts[1];
+    } else {
+      return 0;
+    }
+  });
+};
+
+const part2 = (input) => {
+  return input.flatMap((line, rowNumber, allLines) => findGearRatios(line, rowNumber, allLines))
+    .reduce((sum, num) => sum + num, 0);
 };
 
 if (process.env.NODE_ENV !== 'test') {
