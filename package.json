@@ -6,7 +6,8 @@
   "scripts": {
     "test": "NODE_ENV=test node --test",
     "day01": "node day01/solution.js day01/input",
-    "day02": "node day02/solution.js day02/input"
+    "day02": "node day02/solution.js day02/input",
+    "day03": "node day03/solution.js day03/input"
   },
   "author": "",
   "license": "ISC",
