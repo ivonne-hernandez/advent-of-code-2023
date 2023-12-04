@@ -1,18 +1,27 @@
 import readInput from "../read-input.js";
 
-const findAdjacentCharacters = (lines, rowNumber, columnNumbers, matchedString) => {
-  const leftMostColumn = columnNumbers[0] === 0 ? 0 : columnNumbers[0] - 1;
-  const rightMostColumn = columnNumbers.at(-1) === lines[0].length - 1 ?
-    columnNumbers.at(-1) :
-    columnNumbers.at(-1) + 1;
+const getBoundariesOfAdjacentBox = (match, rowNumber, allLines) => {
+  const matchStartingColumn = match.index;
+  const matchEndingColumn = match.index + match[0].length - 1;
+
+  const leftMostColumn = matchStartingColumn === 0 ? 0 : matchStartingColumn - 1;
+  const rightMostColumn = matchEndingColumn === allLines[0].length - 1 ?
+    matchEndingColumn :
+    matchEndingColumn + 1;
   const topRow = rowNumber === 0 ? 0 : rowNumber - 1;
-  const bottomRow = rowNumber === lines.length - 1 ? rowNumber : rowNumber + 1;
+  const bottomRow = rowNumber === allLines.length - 1 ? rowNumber : rowNumber + 1;
+
+  return { left: leftMostColumn, right: rightMostColumn, top: topRow, bottom: bottomRow };
+};
+
+const findAdjacentCharacters = (match, rowNumber, allLines) => {
+  const { left, right, top, bottom } = getBoundariesOfAdjacentBox(match, rowNumber, allLines);
 
   const adjacentCharacters = [];
-  for (let i = topRow; i <= bottomRow; i++) {
-    const rowSubstring = lines[i].slice(leftMostColumn, rightMostColumn + 1);
+  for (let i = top; i <= bottom; i++) {
+    const rowSubstring = allLines[i].slice(left, right + 1);
     if (i === rowNumber) {
-      adjacentCharacters.push(...rowSubstring.replace(matchedString, '').split(''));
+      adjacentCharacters.push(...rowSubstring.replace(match, '').split(''));
     } else {
       adjacentCharacters.push(...rowSubstring.split(''));
     }
@@ -20,23 +29,19 @@ const findAdjacentCharacters = (lines, rowNumber, columnNumbers, matchedString) 
   return adjacentCharacters;
 };
 
-const determineValidEnginePartNumber = (lines, match, rowNumber) => {
-  const columnNumbersOfMatchedCharacters = [];
-  for (let i = match.index; i < match.index + match[0].length; i++) {
-    columnNumbersOfMatchedCharacters.push(i);
-  }
-  const adjacentCharacters = findAdjacentCharacters(lines, rowNumber, columnNumbersOfMatchedCharacters, match[0]);
+const determineValidEnginePartNumber = (match, rowNumber, allLines) => {
+  const adjacentCharacters = findAdjacentCharacters(match, rowNumber, allLines);
   return adjacentCharacters.some(character => character !== '.' && /\D/.test(character));
 };
 
-const findEnginePartNumbers = (lines, line, rowNumber) => {
+const findEnginePartNumbers = (line, rowNumber, allLines) => {
   const possibleMatches = Array.from(line.matchAll(/\d+/g));
-  return possibleMatches.filter(match => determineValidEnginePartNumber(lines, match, rowNumber))
+  return possibleMatches.filter(match => determineValidEnginePartNumber(match, rowNumber, allLines))
     .map(match => Number(match[0]));
 };
 
 const part1 = (input) => {
-  return input.flatMap((line, i, lines) => findEnginePartNumbers(lines, line, i))
+  return input.flatMap((line, rowNumber, allLines) => findEnginePartNumbers(line, rowNumber, allLines))
     .reduce((sum, num) => sum + num, 0);
 };
 
