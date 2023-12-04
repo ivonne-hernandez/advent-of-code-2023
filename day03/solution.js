@@ -21,7 +21,7 @@ const findAdjacentCharacters = (match, rowNumber, allLines) => {
   for (let i = top; i <= bottom; i++) {
     const rowSubstring = allLines[i].slice(left, right + 1);
     if (i === rowNumber) {
-      adjacentCharacters.push(...rowSubstring.replace(match, '').split(''));
+      adjacentCharacters.push(...rowSubstring.replace(match[0], '').split(''));
     } else {
       adjacentCharacters.push(...rowSubstring.split(''));
     }
