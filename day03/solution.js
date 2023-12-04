@@ -50,9 +50,9 @@ const getAdjacentEngineParts = (allLines, { left, right, top, bottom }) => {
   for (let row = top; row <= bottom; row++) {
     const possibleAdjacentNumbersInRow = Array.from(allLines[row].matchAll(/\d+/g));
     const adjacentNumbersInRow = possibleAdjacentNumbersInRow.filter(match => {
-      const startingColumn = match.index;
-      const endingColumn = match.index + match[0].length - 1;
-      return endingColumn >= left && startingColumn <= right;
+      const matchStartingColumn = match.index;
+      const matchEndingColumn = match.index + match[0].length - 1;
+      return matchEndingColumn >= left && matchStartingColumn <= right;
     })
       .map(match => Number(match[0]));
     adjacentEngineParts.push(...adjacentNumbersInRow);
