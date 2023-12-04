@@ -18,7 +18,24 @@ const part1 = (input) => {
 };
 
 const part2 = (input) => {
-
+  const cardCounts = input.reduce((counts, card) => {
+    const cardId = card.replaceAll(/ +/g, ' ').match(/Card (\d+):/)[1];
+    counts[cardId] = 1;
+    return counts;
+  }, {});
+  const cardIdToWins = input.reduce((counts, card) => {
+    const cardId = card.replaceAll(/ +/g, ' ').match(/Card (\d+):/)[1];
+    counts[cardId] = countNumberOfWins(card);
+    return counts;
+  }, {});
+  Object.keys(cardIdToWins).forEach(cardId => {
+    for (let i = 0; i < cardCounts[cardId]; i++) {
+      for (let j = 0; j < cardIdToWins[cardId]; j++) {
+        cardCounts[Number(cardId) + j + 1] += 1;
+      }
+    }
+  });
+  return Object.values(cardCounts).reduce((sum, num) => sum + num, 0);
 };
 
 if (process.env.NODE_ENV !== 'test') {
