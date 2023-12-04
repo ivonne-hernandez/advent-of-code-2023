@@ -28,7 +28,7 @@ const numberWordToNumber = {
 };
 
 const findDigit = (line, regexes, sortFunction) => {
-  const matches = regexes.flatMap(regex => [...line.matchAll(regex)]);
+  const matches = regexes.flatMap(regex => Array.from(line.matchAll(regex)));
   const sortedMatches = matches.sort(sortFunction);
   const number = sortedMatches[0][0];
   if (Number(number)) {

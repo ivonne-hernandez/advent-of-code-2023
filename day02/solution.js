@@ -11,9 +11,9 @@ const getGameId = (gameRecord) => {
 };
 
 const getColorCounts = (gameRecord) => {
-  const red = [...gameRecord.matchAll(/(\d+) red/g)].map(match => Number(match[1]));
-  const green = [...gameRecord.matchAll(/(\d+) green/g)].map(match => Number(match[1]));
-  const blue = [...gameRecord.matchAll(/(\d+) blue/g)].map(match => Number(match[1]));
+  const red = Array.from(gameRecord.matchAll(/(\d+) red/g)).map(match => Number(match[1]));
+  const green = Array.from(gameRecord.matchAll(/(\d+) green/g)).map(match => Number(match[1]));
+  const blue = Array.from(gameRecord.matchAll(/(\d+) blue/g)).map(match => Number(match[1]));
   return { red, green, blue };
 };
 
