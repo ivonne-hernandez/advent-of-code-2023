@@ -27,14 +27,14 @@ const findMapName = (line) => {
 };
 
 const buildMaps = (input) => {
-  const maps = {
-    seedToSoil: {},
-    soilToFertilizer: {},
-    fertilizerToWater: {},
-    waterToLight: {},
-    lightToTemperature: {},
-    temperatureToHumidity: {},
-    humidityToLocation: {},
+  const mapRanges = {
+    seedToSoil: [],
+    soilToFertilizer: [],
+    fertilizerToWater: [],
+    waterToLight: [],
+    lightToTemperature: [],
+    temperatureToHumidity: [],
+    humidityToLocation: [],
   };
 
   let currentMapKey = '';
@@ -46,13 +46,28 @@ const buildMaps = (input) => {
     }
     if (isLineOfNumbers(line)) {
       const [destStart, sourceStart, rangeLength] = line.split(' ').map(num => Number(num));
-      for (let i = 0; i < rangeLength; i++) {
-        maps[currentMapKey][sourceStart + i] = destStart + i;
-      }
+      mapRanges[currentMapKey].push({ destStart, sourceStart, rangeLength });
     }
   });
 
-  return maps;
+  return mapRanges;
+};
+
+const isInMapRange = (mapRanges, key) => {
+  return mapRanges.some(range => {
+    const { sourceStart, rangeLength } = range;
+    return sourceStart <= key && key < sourceStart + rangeLength;
+  });
+}
+
+const calculateDestination = (mapRanges, key) => {
+  const matchingRange = mapRanges.find(range => {
+    const { sourceStart, rangeLength } = range;
+    return sourceStart <= key && key < sourceStart + rangeLength;
+  });
+  const { destStart, sourceStart } = matchingRange;
+  let keyToSourceDiff = key - sourceStart;
+  return destStart + keyToSourceDiff;
 };
 
 const part1 = (input) => {
@@ -69,13 +84,13 @@ const part1 = (input) => {
 
   const seedLocations = seeds.map(seed => {
     let key = seed;
-    key = key in seedToSoil ? seedToSoil[key] : key;
-    key = key in soilToFertilizer ? soilToFertilizer[key] : key;
-    key = key in fertilizerToWater ? fertilizerToWater[key] : key;
-    key = key in waterToLight ? waterToLight[key] : key;
-    key = key in lightToTemperature ? lightToTemperature[key] : key;
-    key = key in temperatureToHumidity ? temperatureToHumidity[key] : key;
-    const location = key in humidityToLocation ? humidityToLocation[key] : key;
+    key = isInMapRange(seedToSoil, key) ? calculateDestination(seedToSoil, key) : key;
+    key = isInMapRange(soilToFertilizer, key) ? calculateDestination(soilToFertilizer, key) : key;
+    key = isInMapRange(fertilizerToWater, key) ? calculateDestination(fertilizerToWater, key) : key;
+    key = isInMapRange(waterToLight, key) ? calculateDestination(waterToLight, key) : key;
+    key = isInMapRange(lightToTemperature, key) ? calculateDestination(lightToTemperature, key) : key;
+    key = isInMapRange(temperatureToHumidity, key) ? calculateDestination(temperatureToHumidity, key) : key;
+    const location = isInMapRange(humidityToLocation, key) ? calculateDestination(humidityToLocation, key) : key;
     return location;
   });
 

@@ -10,5 +10,11 @@ describe('day05 solution', () => {
       const result = part1(input);
       assert.strictEqual(result, 35);
     });
+
+    it('should return the correct value using the puzzle input', () => {
+      const input = readInput('day05/input');
+      const result = part1(input);
+      assert.strictEqual(result, 88151870);
+    });
   });
 });
