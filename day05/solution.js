@@ -53,48 +53,43 @@ const buildMaps = (input) => {
   return mapRanges;
 };
 
-const isInMapRange = (mapRanges, key) => {
-  return mapRanges.some(range => {
-    const { sourceStart, rangeLength } = range;
-    return sourceStart <= key && key < sourceStart + rangeLength;
-  });
-}
-
 const calculateDestination = (mapRanges, key) => {
   const matchingRange = mapRanges.find(range => {
     const { sourceStart, rangeLength } = range;
     return sourceStart <= key && key < sourceStart + rangeLength;
   });
+
+  if (!matchingRange) return key;
+
   const { destStart, sourceStart } = matchingRange;
   let keyToSourceDiff = key - sourceStart;
   return destStart + keyToSourceDiff;
 };
 
-const part1 = (input) => {
-  const seeds = Array.from(input[0].matchAll(/\d+/g)).map(match => Number(match[0]));
-  const {
-    seedToSoil,
-    soilToFertilizer,
-    fertilizerToWater,
-    waterToLight,
-    lightToTemperature,
-    temperatureToHumidity,
-    humidityToLocation
-  } = buildMaps(input);
+const calculateLowestLocation = (seeds, maps) => {
+  let lowestLocation;
 
-  const seedLocations = seeds.map(seed => {
+  seeds.forEach(seed => {
     let key = seed;
-    key = isInMapRange(seedToSoil, key) ? calculateDestination(seedToSoil, key) : key;
-    key = isInMapRange(soilToFertilizer, key) ? calculateDestination(soilToFertilizer, key) : key;
-    key = isInMapRange(fertilizerToWater, key) ? calculateDestination(fertilizerToWater, key) : key;
-    key = isInMapRange(waterToLight, key) ? calculateDestination(waterToLight, key) : key;
-    key = isInMapRange(lightToTemperature, key) ? calculateDestination(lightToTemperature, key) : key;
-    key = isInMapRange(temperatureToHumidity, key) ? calculateDestination(temperatureToHumidity, key) : key;
-    const location = isInMapRange(humidityToLocation, key) ? calculateDestination(humidityToLocation, key) : key;
-    return location;
+    key = calculateDestination(maps.seedToSoil, key);
+    key = calculateDestination(maps.soilToFertilizer, key);
+    key = calculateDestination(maps.fertilizerToWater, key);
+    key = calculateDestination(maps.waterToLight, key);
+    key = calculateDestination(maps.lightToTemperature, key);
+    key = calculateDestination(maps.temperatureToHumidity, key);
+    const location = calculateDestination(maps.humidityToLocation, key);
+    if (lowestLocation === undefined || location < lowestLocation) {
+      lowestLocation = location;
+    }
   });
 
-  return Math.min(...seedLocations);
+  return lowestLocation;
+};
+
+const part1 = (input) => {
+  const seeds = Array.from(input[0].matchAll(/\d+/g)).map(match => Number(match[0]));
+  const maps = buildMaps(input);
+  return calculateLowestLocation(seeds, maps);
 };
 
 const part2 = (input) => {
