@@ -93,11 +93,26 @@ const part1 = (input) => {
 };
 
 const part2 = (input) => {
+  const seedPairs = Array.from(input[0].matchAll(/\d+ \d+/g)).map(matchedPair => {
+    return Array.from(matchedPair[0].matchAll(/\d+/g)).map(num => Number(num));
+  });
+  const maps = buildMaps(input);
 
+  let lowestLocation;
+  seedPairs.forEach(pair => {
+    for (let i = 0; i < pair[1]; i++) {
+      const location = calculateLowestLocation([pair[0] + i], maps);
+      if (lowestLocation === undefined || location < lowestLocation) {
+        lowestLocation = location;
+      }
+    }
+  })
+  return lowestLocation;
 };
 
 if (process.env.NODE_ENV !== 'test') {
   console.log('Part 1 solution:', part1(readInput()));
+  console.log('Warning! Part 2 may take a couple minutes to complete.')
   console.log('Part 2 solution:', part2(readInput()));
 }
 
