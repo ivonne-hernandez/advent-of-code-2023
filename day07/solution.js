@@ -33,8 +33,8 @@ const calculateHandValue = (cardCounts) => {
   return 1;
 };
 
-const part1 = (input) => {
-  const hands = input.map(line => {
+const buildHands = (input) => {
+  return input.map(line => {
     const [cardsString, bet] = line.split(' ');
     const cards = cardsString.split('');
     const cardCounts = {};
@@ -46,7 +46,10 @@ const part1 = (input) => {
     });
     return { cards, bet: Number(bet), handValue: calculateHandValue(cardCounts) };
   });
-  const sortedHands = hands.toSorted((a, z) => {
+}
+
+const sortHands = (hands) => {
+  return hands.toSorted((a, z) => {
     if (a.handValue > z.handValue) return 1;
     if (a.handValue < z.handValue) return -1;
     for (let i = 0; i < 5; i++) {
@@ -55,6 +58,11 @@ const part1 = (input) => {
     }
     return 0;
   });
+}
+
+const part1 = (input) => {
+  const hands = buildHands(input);
+  const sortedHands = sortHands(hands);
   return sortedHands.reduce((total, hand, i) => {
     return total + (hand.bet * (i + 1));
   }, 0);
