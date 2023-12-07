@@ -73,10 +73,9 @@ const transformJokers = (cardCounts) => {
 
 const buildHands = (input, useJokers = false) => {
   return input.map(line => {
-    const [cardsString, bet] = line.split(' ');
-    const cards = cardsString.split('');
+    const [cards, bet] = line.split(' ');
     const cardCounts = {};
-    cards.forEach(card => {
+    cards.split('').forEach(card => {
       if (!cardCounts[card]) {
         cardCounts[card] = 0;
       }
