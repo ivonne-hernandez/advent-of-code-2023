@@ -49,7 +49,29 @@ const calculateHandValue = (cardCounts) => {
   return 1;
 };
 
-const buildHands = (input) => {
+const transformJokers = (cardCounts) => {
+  const jokerCount = cardCounts.J;
+  if (jokerCount === 5) {
+    return cardCounts;
+  }
+  const countsWithoutJokers = {};
+  for (let card in cardCounts) {
+    if (card !== 'J') {
+      countsWithoutJokers[card] = cardCounts[card];
+    }
+  }
+  const sortedKeys = Object.keys(countsWithoutJokers).toSorted((a, z) => {
+    if (countsWithoutJokers[a] < countsWithoutJokers[z]) return 1;
+    if (countsWithoutJokers[a] > countsWithoutJokers[z]) return -1;
+    if (cardValuesPart2[a] < cardValuesPart2[z]) return 1;
+    if (cardValuesPart2[a] > cardValuesPart2[z]) return -1;
+    return 0;
+  });
+  countsWithoutJokers[sortedKeys[0]] += jokerCount;
+  return countsWithoutJokers;
+};
+
+const buildHands = (input, useJokers = false) => {
   return input.map(line => {
     const [cardsString, bet] = line.split(' ');
     const cards = cardsString.split('');
@@ -60,17 +82,23 @@ const buildHands = (input) => {
       }
       cardCounts[card] += 1;
     });
+
+    if (useJokers && cardCounts.J) {
+      const jokerCardCounts = transformJokers(cardCounts);
+      return { cards, bet: Number(bet), handValue: calculateHandValue(jokerCardCounts) };
+    }
+
     return { cards, bet: Number(bet), handValue: calculateHandValue(cardCounts) };
   });
 }
 
-const sortHands = (hands) => {
+const sortHands = (hands, cardValues) => {
   return hands.toSorted((a, z) => {
     if (a.handValue > z.handValue) return 1;
     if (a.handValue < z.handValue) return -1;
     for (let i = 0; i < 5; i++) {
-      if (cardValuesPart1[a.cards[i]] > cardValuesPart1[z.cards[i]]) return 1;
-      if (cardValuesPart1[a.cards[i]] < cardValuesPart1[z.cards[i]]) return -1;
+      if (cardValues[a.cards[i]] > cardValues[z.cards[i]]) return 1;
+      if (cardValues[a.cards[i]] < cardValues[z.cards[i]]) return -1;
     }
     return 0;
   });
@@ -78,14 +106,18 @@ const sortHands = (hands) => {
 
 const part1 = (input) => {
   const hands = buildHands(input);
-  const sortedHands = sortHands(hands);
+  const sortedHands = sortHands(hands, cardValuesPart1);
   return sortedHands.reduce((total, hand, i) => {
     return total + (hand.bet * (i + 1));
   }, 0);
 };
 
 const part2 = (input) => {
-
+  const hands = buildHands(input, true);
+  const sortedHands = sortHands(hands, cardValuesPart2);
+  return sortedHands.reduce((total, hand, i) => {
+    return total + (hand.bet * (i + 1));
+  }, 0);
 };
 
 if (process.env.NODE_ENV !== 'test') {
