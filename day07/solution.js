@@ -1,6 +1,6 @@
 import readInput from "../read-input.js";
 
-const cardValues = {
+const cardValuesPart1 = {
   'A': 14,
   'K': 13,
   'Q': 12,
@@ -14,6 +14,22 @@ const cardValues = {
   '4': 4,
   '3': 3,
   '2': 2,
+};
+
+const cardValuesPart2 = {
+  'A': 14,
+  'K': 13,
+  'Q': 12,
+  'T': 10,
+  '9': 9,
+  '8': 8,
+  '7': 7,
+  '6': 6,
+  '5': 5,
+  '4': 4,
+  '3': 3,
+  '2': 2,
+  'J': 1,
 };
 
 const calculateHandValue = (cardCounts) => {
@@ -53,8 +69,8 @@ const sortHands = (hands) => {
     if (a.handValue > z.handValue) return 1;
     if (a.handValue < z.handValue) return -1;
     for (let i = 0; i < 5; i++) {
-      if (cardValues[a.cards[i]] > cardValues[z.cards[i]]) return 1;
-      if (cardValues[a.cards[i]] < cardValues[z.cards[i]]) return -1;
+      if (cardValuesPart1[a.cards[i]] > cardValuesPart1[z.cards[i]]) return 1;
+      if (cardValuesPart1[a.cards[i]] < cardValuesPart1[z.cards[i]]) return -1;
     }
     return 0;
   });
