@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import readInput from "../read-input.js";
-import { part1 } from "./solution.js";
+import { part1, part2 } from "./solution.js";
 
 describe('day08 solution', () => {
   describe('part 1', () => {
@@ -21,6 +21,20 @@ describe('day08 solution', () => {
       const input = readInput('day08/input');
       const result = part1(input);
       assert.strictEqual(result, 12737);
+    });
+  });
+
+  describe('part 2', () => {
+    it('should return the correct value using the example input 3', () => {
+      const input = readInput('day08/example-input-3');
+      const result = part2(input);
+      assert.strictEqual(result, 6);
+    });
+
+    it('should return the correct value using the puzzle input', () => {
+      const input = readInput('day08/input');
+      const result = part2(input);
+      assert.strictEqual(result, 9064949303801);
     });
   });
 });
