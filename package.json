@@ -11,7 +11,8 @@
     "day04": "node day04/solution.js day04/input",
     "day05": "node day05/solution.js day05/input",
     "day06": "node day06/solution.js day06/input",
-    "day07": "node day07/solution.js day07/input"
+    "day07": "node day07/solution.js day07/input",
+    "day08": "node day08/solution.js day08/input"
   },
   "author": "",
   "license": "ISC",
