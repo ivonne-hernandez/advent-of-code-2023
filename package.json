@@ -16,5 +16,8 @@
   },
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "compute-lcm": "^1.1.2"
+  }
 }
