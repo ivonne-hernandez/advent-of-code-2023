@@ -21,6 +21,14 @@ const extrapolateNextNumber = (differenceRows) => {
   return nextNumInRow;
 };
 
+const extrapolatePreviousNumber = (differenceRows) => {
+  let previousNumInRow = 0;
+  for (let i = 1; i < differenceRows.length; i++) {
+    previousNumInRow = differenceRows[i][0] - previousNumInRow;
+  }
+  return previousNumInRow;
+};
+
 const part1 = (input) => {
   return input.reduce((sum, line) => {
     const numbers = line.split(' ').map(num => Number(num));
@@ -30,7 +38,11 @@ const part1 = (input) => {
 };
 
 const part2 = (input) => {
-
+  return input.reduce((sum, line) => {
+    const numbers = line.split(' ').map(num => Number(num));
+    const differenceRows = generateDifferenceRows([numbers]).toReversed();
+    return sum + extrapolatePreviousNumber(differenceRows);
+  }, 0);
 };
 
 if (process.env.NODE_ENV !== 'test') {
