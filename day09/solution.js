@@ -1,7 +1,32 @@
 import readInput from '../read-input.js';
 
-const part1 = (input) => {
+const generateDifferenceRows = (rows) => {
+  const newRow = [];
+  const lastRow = rows.at(-1);
+  for (let i = 0; i < lastRow.length - 1; i++) {
+    newRow.push(lastRow[i + 1] - lastRow[i]);
+  }
+  if (newRow.every(elem => elem === 0)) {
+    return [...rows, newRow];
+  } else {
+    return generateDifferenceRows([...rows, newRow]);
+  }
+};
 
+const extrapolateNextNumber = (differenceRows) => {
+  let nextNumInRow = 0;
+  for (let i = 1; i < differenceRows.length; i++) {
+    nextNumInRow = nextNumInRow + differenceRows[i].at(-1);
+  }
+  return nextNumInRow;
+};
+
+const part1 = (input) => {
+  return input.reduce((sum, line) => {
+    const numbers = line.split(' ').map(num => Number(num));
+    const differenceRows = generateDifferenceRows([numbers]).toReversed();
+    return sum + extrapolateNextNumber(differenceRows);
+  }, 0);
 };
 
 const part2 = (input) => {
